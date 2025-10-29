@@ -1,5 +1,8 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import ch.qos.logback.classic.Logger;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
@@ -10,6 +13,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/films")
 public class FilmController {
@@ -26,6 +30,7 @@ public class FilmController {
         validateFilmData(film);
         film.setId(getNextId());
         films.put(film.getId(), film);
+        log.info("Создан новый фильм: {}", film);
         return film;
     }
 
@@ -39,26 +44,32 @@ public class FilmController {
             oldFilm.setDescription(newFilm.getDescription());
             oldFilm.setReleaseDate(newFilm.getReleaseDate());
             oldFilm.setDuration(newFilm.getDuration());
+            log.info("Обновлен фильм: {}", oldFilm);
             return oldFilm;
         }
+        log.error("Фильм с идентификатором {} не найден!", filmId);
         throw new NotFoundException("Фильм с идентификатором " + filmId + " не найден!");
     }
 
     private void validateFilmData(Film film) {
         String filmName = film.getName();
         if (filmName == null || filmName.isBlank()) {
+            log.error("Название фильма не может быть пустым");
             throw new ValidationException("Название фильма не может быть пустым");
         }
         int filmDescriptionLength = film.getDescription().length();
         if (filmDescriptionLength > 200) {
+            log.error("Размер опичания фильма ({}) больше 200 символов", filmDescriptionLength);
             throw new ValidationException("Размер описания фильма (" + filmDescriptionLength + ") больше 200 символов");
         }
         Instant filmReleaseDate = film.getReleaseDate();
         if (filmReleaseDate.isBefore(Instant.ofEpochSecond(CINEMA_BIRTHDAY_TIMESTAMP))) {
+            log.error("Дата выхода фильма ({}) указана до дня рождения кино (28 декабря 1895)", filmReleaseDate);
             throw new ValidationException("Дата выхода фильма (" + filmReleaseDate + ") " +
                     "указана до дня рождения кино (28 декабря 1895)");
         }
         if (!film.getDuration().isPositive()) {
+            log.error("Длительность фильма должна быть положительной");
             throw new ValidationException("Длительность фильма должна быть положительной");
         }
     }
