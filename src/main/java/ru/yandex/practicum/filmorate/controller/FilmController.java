@@ -6,7 +6,7 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +16,6 @@ import java.util.Map;
 @RequestMapping("/films")
 public class FilmController {
     private final Map<Integer, Film> films = new HashMap<>();
-    private final static long CINEMA_BIRTHDAY_TIMESTAMP = -2_335_573_817L;
 
     @GetMapping
     public Collection<Film> getAll() {
@@ -60,13 +59,13 @@ public class FilmController {
             log.error("Размер опичания фильма ({}) больше 200 символов", filmDescriptionLength);
             throw new ValidationException("Размер описания фильма (" + filmDescriptionLength + ") больше 200 символов");
         }
-        Instant filmReleaseDate = film.getReleaseDate();
-        if (filmReleaseDate.isBefore(Instant.ofEpochSecond(CINEMA_BIRTHDAY_TIMESTAMP))) {
+        LocalDate filmReleaseDate = film.getReleaseDate();
+        if (filmReleaseDate.isBefore(LocalDate.of(1895, 12, 28))) {
             log.error("Дата выхода фильма ({}) указана до дня рождения кино (28 декабря 1895)", filmReleaseDate);
             throw new ValidationException("Дата выхода фильма (" + filmReleaseDate + ") " +
                     "указана до дня рождения кино (28 декабря 1895)");
         }
-        if (!film.getDuration().isPositive()) {
+        if (film.getDuration() < 1) {
             log.error("Длительность фильма должна быть положительной");
             throw new ValidationException("Длительность фильма должна быть положительной");
         }
