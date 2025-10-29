@@ -38,14 +38,11 @@ public class UserController {
         validateUserData(newUser);
         int userId = newUser.getId();
         if (users.containsKey(userId)) {
-            User oldUser = users.get(userId);
-            oldUser.setEmail(newUser.getEmail());
-            oldUser.setLogin(newUser.getLogin());
-            oldUser.setBirthday(newUser.getBirthday());
             String userName = newUser.getName();
-            if (userName != null) oldUser.setName(userName);
-            log.info("Обновлен пользователь: {}", oldUser);
-            return oldUser;
+            if (userName == null) newUser.setName(newUser.getLogin());
+            users.put(userId, newUser);
+            log.info("Обновлен пользователь: {}", newUser);
+            return newUser;
         }
         log.error("Пользователь с идентификатором {} не найден!", userId);
         throw new NotFoundException("Пользователь с идентификатором " + userId + " не найден!");

@@ -36,13 +36,9 @@ public class FilmController {
         validateFilmData(newFilm);
         int filmId = newFilm.getId();
         if (films.containsKey(filmId)) {
-            Film oldFilm = films.get(filmId);
-            oldFilm.setName(newFilm.getName());
-            oldFilm.setDescription(newFilm.getDescription());
-            oldFilm.setReleaseDate(newFilm.getReleaseDate());
-            oldFilm.setDuration(newFilm.getDuration());
-            log.info("Обновлен фильм: {}", oldFilm);
-            return oldFilm;
+            films.put(filmId, newFilm);
+            log.info("Обновлен фильм: {}", newFilm);
+            return newFilm;
         }
         log.error("Фильм с идентификатором {} не найден!", filmId);
         throw new NotFoundException("Фильм с идентификатором " + filmId + " не найден!");
