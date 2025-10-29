@@ -25,13 +25,8 @@ class FilmorateApplicationTests {
 
 	@Test
 	void checkCreateNewUser() throws Exception {
-		String userJson = """
-                {
-                \t"login": "dolore",
-                \t"name": "Nick Name",
-                \t"email": "mail@mail.ru",
-                \t"birthday": "1946-08-20"
-                }""";
+		String userJson = "{\"login\":\"dolore\",\"name\":\"Nick Name\",\"email\":\"mail@mail.ru\"," +
+				"\"birthday\":\"1946-08-20\"}";
 
 		this.mockMvc.perform(post("/users")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -46,13 +41,8 @@ class FilmorateApplicationTests {
 
 	@Test
 	void checkCreateUserWrongLogin() throws Exception {
-		String userJson = """
-                {
-                \t"login": "dolore dolores",
-                \t"name": "Nick Name",
-                \t"email": "mail@mail.ru",
-                \t"birthday": "1946-08-20"
-                }""";
+		String userJson = "{\"login\":\"dolore dolores\",\"name\":\"Nick Name\",\"email\":\"mail@mail.ru\"," +
+				"\"birthday\":\"1946-08-20\"}";
 
 		this.mockMvc.perform(post("/users")
 						.contentType(MediaType.APPLICATION_JSON)
@@ -65,13 +55,8 @@ class FilmorateApplicationTests {
 
 	@Test
 	void checkCreateUserWrongEmail() throws Exception {
-		String userJson = """
-                {
-                \t"login": "dolore",
-                \t"name": "Nick Name",
-                \t"email": "mailmail.ru",
-                \t"birthday": "1946-08-20"
-                }""";
+		String userJson = "{\"login\":\"dolore\",\"name\":\"Nick Name\",\"email\":\"mailmail.ru\"" +
+				",\"birthday\":\"1946-08-20\"}";
 
 		this.mockMvc.perform(post("/users")
 						.contentType(MediaType.APPLICATION_JSON)
@@ -84,13 +69,8 @@ class FilmorateApplicationTests {
 
 	@Test
 	void checkCreateUserWrongBirthday() throws Exception {
-		String userJson = """
-                {
-                \t"login": "dolore",
-                \t"name": "Nick Name",
-                \t"email": "mail@mail.ru",
-                \t"birthday": "3000-08-20"
-                }""";
+		String userJson = "{\"login\":\"dolore\",\"name\":\"Nick Name\",\"email\":\"mail@mail.ru\"," +
+				"\"birthday\":\"3000-08-20\"}";
 
 		this.mockMvc.perform(post("/users")
 						.contentType(MediaType.APPLICATION_JSON)
@@ -103,15 +83,8 @@ class FilmorateApplicationTests {
 
 	@Test
 	void checkUpdateUser() throws Exception {
-
-		String updatedUserJson = """
-                {
-                \t"id": "1",
-                \t"login": "dolores",
-                \t"name": "Name Nick",
-                \t"email": "mail@yandex.ru",
-                \t"birthday": "1990-08-20"
-                }""";
+		String updatedUserJson = "{\"id\":\"1\",\"login\":\"dolores\",\"name\":\"Name Nick\"," +
+				"\"email\":\"mail@yandex.ru\",\"birthday\":\"1990-08-20\"}";
 
 		this.mockMvc.perform(put("/users")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -126,14 +99,8 @@ class FilmorateApplicationTests {
 
 	@Test
 	void checkUpdateUnknownUser() throws Exception {
-		String updatedUserJson = """
-                {
-                \t"id": "0",
-                \t"login": "dolores",
-                \t"name": "Name Nick",
-                \t"email": "mail@yandex.ru",
-                \t"birthday": "1990-08-20"
-                }""";
+		String updatedUserJson = "{\"id\":\"0\",\"login\":\"dolores\",\"name\":\"Name Nick\"," +
+				"\"email\":\"mail@yandex.ru\",\"birthday\":\"1990-08-20\"}";
 
 		this.mockMvc.perform(put("/users")
 						.contentType(MediaType.APPLICATION_JSON)
@@ -143,13 +110,7 @@ class FilmorateApplicationTests {
 
 	@Test
 	void checkCreateNewEmptyNameUser() throws Exception {
-		String userJson = """
-                {
-                \t"login": "dolore",
-                \t"name": "",
-                \t"email": "mail@mail.ru",
-                \t"birthday": "1946-08-20"
-                }""";
+		String userJson = "{\"login\":\"dolore\",\"name\":\"\",\"email\":\"mail@mail.ru\",\"birthday\":\"1946-08-20\"}";
 
 		this.mockMvc.perform(post("/users")
 						.contentType(MediaType.APPLICATION_JSON)
@@ -175,13 +136,8 @@ class FilmorateApplicationTests {
 
 	@Test
 	void checkCreateNewFilm() throws Exception {
-		String filmJson = """
-                {
-                \t"name": "nisi eiusmod",
-                \t"description": "adipisicing",
-                \t"releaseDate": "1967-03-25",
-                \t"duration": 100
-                }""";
+		String filmJson = "{\"name\":\"nisi eiusmod\",\"description\":\"adipisicing\",\"releaseDate\":\"1967-03-25\"," +
+				"\"duration\":100}";
 
 		this.mockMvc.perform(post("/films")
 						.contentType(MediaType.APPLICATION_JSON)
@@ -196,13 +152,8 @@ class FilmorateApplicationTests {
 
 	@Test
 	void checkCreateFilmWrongName() throws Exception {
-		String filmJson = """
-                {
-                \t"name": "",
-                \t"description": "adipisicing",
-                \t"releaseDate": "1967-03-25",
-                \t"duration": 100
-                }""";
+		String filmJson = "{\"name\":\"\",\"description\":\"adipisicing\",\"releaseDate\":\"1967-03-25\"," +
+				"\"duration\":100}";
 
 		this.mockMvc.perform(post("/films")
 						.contentType(MediaType.APPLICATION_JSON)
@@ -215,21 +166,13 @@ class FilmorateApplicationTests {
 
 	@Test
 	void checkCreateFilmWrongDescription() throws Exception {
-		String filmJson = """
-                {
-                \t"name": "nisi eiusmod",
-                \t"description": "012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890",
-                \t"releaseDate": "1967-03-25",
-                \t"duration": 100
-                }""";
+		String filmJson = "{\"name\":\"nisi eiusmod\"," +
+				"\"description\":\"012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890\"," +
+				"\"releaseDate\":\"1967-03-25\",\"duration\":100}";
 
-		String film2Json = """
-                {
-                \t"name": "nisi eiusmod",
-                \t"description": "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789",
-                \t"releaseDate": "1967-03-25",
-                \t"duration": 100
-                }""";
+		String film2Json = "{\"name\":\"nisi eiusmod\"," +
+				"\"description\":\"01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789\"," +
+				"\"releaseDate\":\"1967-03-25\",\"duration\":100}";
 
 		this.mockMvc.perform(post("/films")
 						.contentType(MediaType.APPLICATION_JSON)
@@ -247,20 +190,10 @@ class FilmorateApplicationTests {
 
 	@Test
 	void checkCreateFilmWrongReleaseDate() throws Exception {
-		String filmJson = """
-                {
-                \t"name": "nisi eiusmod",
-                \t"description": "adipisicing",
-                \t"releaseDate": "1895-12-27",
-                \t"duration": 100
-                }""";
-		String film2Json = """
-                {
-                \t"name": "nisi eiusmod",
-                \t"description": "adipisicing",
-                \t"releaseDate": "1895-12-28",
-                \t"duration": 100
-                }""";
+		String filmJson = "{\"name\":\"nisi eiusmod\",\"description\":\"adipisicing\",\"releaseDate\":\"1895-12-27\"," +
+				"\"duration\":100}";
+		String film2Json = "{\"name\":\"nisi eiusmod\",\"description\":\"adipisicing\",\"releaseDate\":\"1895-12-28\"," +
+				"\"duration\":100}";
 
 		this.mockMvc.perform(post("/films")
 						.contentType(MediaType.APPLICATION_JSON)
@@ -279,20 +212,10 @@ class FilmorateApplicationTests {
 
 	@Test
 	void checkCreateFilmWrongDuration() throws Exception {
-		String filmJson = """
-                {
-                \t"name": "nisi eiusmod",
-                \t"description": "adipisicing",
-                \t"releaseDate": "1967-03-25",
-                \t"duration": 0
-                }""";
-		String film2Json = """
-                {
-                \t"name": "nisi eiusmod",
-                \t"description": "adipisicing",
-                \t"releaseDate": "1967-03-25",
-                \t"duration": 1
-                }""";
+		String filmJson = "{\"name\":\"nisi eiusmod\",\"description\":\"adipisicing\",\"releaseDate\":\"1967-03-25\"," +
+				"\"duration\":0}";
+		String film2Json = "{\"name\":\"nisi eiusmod\",\"description\":\"adipisicing\",\"releaseDate\":\"1967-03-25\"," +
+				"\"duration\":1}";
 
 		this.mockMvc.perform(post("/films")
 						.contentType(MediaType.APPLICATION_JSON)
@@ -310,21 +233,10 @@ class FilmorateApplicationTests {
 
 	@Test
 	void checkUpdateFilm() throws Exception {
-		String filmJson = """
-                {
-                \t"name": "nisi eiusmod",
-                \t"description": "adipisicing",
-                \t"releaseDate": "1967-03-25",
-                \t"duration": 100
-                }""";
-		String updatedFilmJson = """
-                {
-                \t"id": "1",
-                \t"name": "oma soma",
-                \t"description": "otherwise",
-                \t"releaseDate": "1980-03-25",
-                \t"duration": 50
-                }""";
+		String filmJson = "{\"name\":\"nisi eiusmod\",\"description\":\"adipisicing\",\"releaseDate\":\"1967-03-25\"," +
+				"\"duration\":100}";
+		String updatedFilmJson = "{\"id\":\"1\",\"name\":\"oma soma\",\"description\":\"otherwise\"," +
+				"\"releaseDate\":\"1980-03-25\",\"duration\":50}";
 
 		this.mockMvc.perform(post("/films")
 						.contentType(MediaType.APPLICATION_JSON)
@@ -344,14 +256,8 @@ class FilmorateApplicationTests {
 
 	@Test
 	void checkUpdateUnknownFilm() throws Exception {
-		String updatedFilmJson = """
-                {
-                \t"id": "0",
-                \t"name": "oma soma",
-                \t"description": "otherwise",
-                \t"releaseDate": "1980-03-25",
-                \t"duration": 50
-                }""";
+		String updatedFilmJson = "{\"id\":\"0\",\"name\":\"oma soma\",\"description\":\"otherwise\"," +
+				"\"releaseDate\":\"1980-03-25\",\"duration\":50}";
 
 		this.mockMvc.perform(put("/films")
 						.contentType(MediaType.APPLICATION_JSON)
