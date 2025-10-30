@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class User {
+public class User {  //TODO: Переписать валидацию на Spring Validator
     private int id;
     private String email;
     private String login;
