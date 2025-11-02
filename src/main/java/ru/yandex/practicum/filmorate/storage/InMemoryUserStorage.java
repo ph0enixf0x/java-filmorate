@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -8,6 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class InMemoryUserStorage implements UserStorage {
     private final Map<Integer, User> users = new HashMap<>();
@@ -20,10 +22,9 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public User getUserById(int userId) {
         if (users.containsKey(userId)) {
-            //log.info("Запрошен пользователь с ID: {}", userId);
+            log.info("Запрошен пользователь с ID: {}", userId);
             return users.get(userId);
         }
-        //log.error("Пользователь с идентификатором {} не найден!", userId);
         throw new NotFoundException("Пользователь с идентификатором " + userId + " не найден!");
     }
 
@@ -33,6 +34,7 @@ public class InMemoryUserStorage implements UserStorage {
         String userName = user.getName();
         if (userName == null || userName.isBlank()) user.setName(user.getLogin());
         users.put(user.getId(), user);
+        log.info("Обновлен пользователь {}", user);
         return user;
     }
 
@@ -43,10 +45,9 @@ public class InMemoryUserStorage implements UserStorage {
             String userName = user.getName();
             if (userName == null || userName.isBlank()) user.setName(user.getLogin());
             users.put(userId, user);
-            //log.info("Обновлен пользователь: {}", newUser);
+            log.info("Обновлен пользователь: {}", user);
             return user;
         } else {
-            //log.error("Пользователь с идентификатором {} не найден!", userId);
             throw new NotFoundException("Пользователь с идентификатором " + userId + " не найден!");
         }
     }
@@ -54,6 +55,7 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public void delete(int userId) {
         users.remove(userId);
+        log.info("Удален пользователь с ID: {}", userId);
     }
 
     private int getNextId() {

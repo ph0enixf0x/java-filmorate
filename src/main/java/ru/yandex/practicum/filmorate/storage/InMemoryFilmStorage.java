@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.storage;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -8,6 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Integer, Film> films = new HashMap<>();
@@ -20,10 +22,9 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public Film getFilmById(int filmId) {
         if (films.containsKey(filmId)) {
-            //log.info("Запрошен фильм с ID: {}", filmId);
+            log.info("Запрошен фильм с ID: {}", filmId);
             return films.get(filmId);
         }
-        //log.error("Фильм с идентификатором {} не найден!", filmId);
         throw new NotFoundException("Фильм с идентификатором " + filmId + " не найден!");
     }
 
@@ -31,6 +32,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     public Film create(Film film) {
         film.setId(getNextId());
         films.put(film.getId(), film);
+        log.info("Обновлен фильм {}", film);
         return film;
     }
 
@@ -39,10 +41,9 @@ public class InMemoryFilmStorage implements FilmStorage {
         int filmId = film.getId();
         if (films.containsKey(filmId)) {
             films.put(filmId, film);
-            //log.info("Обновлен фильм: {}", newFilm);
+            log.info("Обновлен фильм: {}", film);
             return film;
         } else {
-            //log.error("Фильм с идентификатором {} не найден!", filmId);
             throw new NotFoundException("Фильм с идентификатором " + filmId + " не найден!");
         }
     }
@@ -50,6 +51,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public void delete(int filmId) {
         films.remove(filmId);
+        log.info("Удален фильм с ID: {}", filmId);
     }
 
     private int getNextId() {
