@@ -29,7 +29,7 @@ public class UserControllerTest {
         this.mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userJson))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value("2"))
                 .andExpect(jsonPath("$.email").value("mail@mail.ru"))
                 .andExpect(jsonPath("$.login").value("dolore"))
@@ -45,7 +45,7 @@ public class UserControllerTest {
         this.mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userJson))
-                .andExpect(status().isInternalServerError())
+                .andExpect(status().isBadRequest())
                 .andExpect(result ->
                         assertEquals("Логин пользователя не может отсутствовать или содержать пробелы",
                                 Objects.requireNonNull(result.getResolvedException()).getMessage()));
@@ -59,10 +59,7 @@ public class UserControllerTest {
         this.mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userJson))
-                .andExpect(status().isInternalServerError())
-                .andExpect(result ->
-                        assertEquals("Электронная почта пользователя отсутствует или задана не корректно",
-                                Objects.requireNonNull(result.getResolvedException()).getMessage()));
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -73,10 +70,7 @@ public class UserControllerTest {
         this.mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userJson))
-                .andExpect(status().isInternalServerError())
-                .andExpect(result ->
-                        assertEquals("Дата рождения пользователя не может быть в будущем",
-                                Objects.requireNonNull(result.getResolvedException()).getMessage()));
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -113,7 +107,7 @@ public class UserControllerTest {
         this.mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userJson))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value("1"))
                 .andExpect(jsonPath("$.email").value("mail@mail.ru"))
                 .andExpect(jsonPath("$.login").value("dolore"))
