@@ -24,6 +24,11 @@ public class UserController {
         return userStorage.getUsers();
     }
 
+    @GetMapping("/{userId}")
+    public User getUser(@PathVariable int userId) {
+        return userStorage.getUserById(userId);
+    }
+
     @PostMapping
     public User create(@Valid @RequestBody User user) {
         validateUserLogin(user);

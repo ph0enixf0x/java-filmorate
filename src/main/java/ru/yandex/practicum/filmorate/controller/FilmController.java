@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.time.LocalDate;
@@ -22,6 +23,11 @@ public class FilmController {
     @GetMapping
     public Collection<Film> getAll() {
         return filmStorage.getFilms();
+    }
+
+    @GetMapping("/{filmId}")
+    public Film getFilm(@PathVariable int filmId) {
+        return filmStorage.getFilmById(filmId);
     }
 
     @PostMapping
