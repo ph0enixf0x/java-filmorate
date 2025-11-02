@@ -29,7 +29,7 @@ public class FilmControllerTest {
         this.mockMvc.perform(post("/films")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(filmJson))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value("2"))
                 .andExpect(jsonPath("$.description").value("adipisicing"))
                 .andExpect(jsonPath("$.releaseDate").value("1967-03-25"))
@@ -45,10 +45,7 @@ public class FilmControllerTest {
         this.mockMvc.perform(post("/films")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(filmJson))
-                .andExpect(status().isInternalServerError())
-                .andExpect(result ->
-                        assertEquals("Название фильма не может быть пустым",
-                                Objects.requireNonNull(result.getResolvedException()).getMessage()));
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -64,15 +61,12 @@ public class FilmControllerTest {
         this.mockMvc.perform(post("/films")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(filmJson))
-                .andExpect(status().isInternalServerError())
-                .andExpect(result ->
-                        assertEquals("Размер описания фильма (201) больше 200 символов",
-                                Objects.requireNonNull(result.getResolvedException()).getMessage()));
+                .andExpect(status().isBadRequest());
 
         this.mockMvc.perform(post("/films")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(film2Json))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test
@@ -85,7 +79,7 @@ public class FilmControllerTest {
         this.mockMvc.perform(post("/films")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(filmJson))
-                .andExpect(status().isInternalServerError())
+                .andExpect(status().isBadRequest())
                 .andExpect(result ->
                         assertEquals("Дата выхода фильма (1895-12-27) указана до дня рождения кино " +
                                         "(28 декабря 1895)",
@@ -94,7 +88,7 @@ public class FilmControllerTest {
         this.mockMvc.perform(post("/films")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(film2Json))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test
@@ -107,15 +101,12 @@ public class FilmControllerTest {
         this.mockMvc.perform(post("/films")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(filmJson))
-                .andExpect(status().isInternalServerError())
-                .andExpect(result ->
-                        assertEquals("Длительность фильма должна быть положительной",
-                                Objects.requireNonNull(result.getResolvedException()).getMessage()));
+                .andExpect(status().isBadRequest());
 
         this.mockMvc.perform(post("/films")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(film2Json))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test
@@ -128,7 +119,7 @@ public class FilmControllerTest {
         this.mockMvc.perform(post("/films")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(filmJson))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
         this.mockMvc.perform(put("/films")
                         .contentType(MediaType.APPLICATION_JSON)
