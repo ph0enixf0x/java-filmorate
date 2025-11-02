@@ -7,10 +7,12 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -19,6 +21,8 @@ public class FilmController {
 
     @Autowired
     private FilmStorage filmStorage;
+    @Autowired
+    private FilmService filmService;
 
     @GetMapping
     public Collection<Film> getAll() {
@@ -40,6 +44,28 @@ public class FilmController {
     public Film update(@Valid @RequestBody Film film) {
         validateFilmReleaseDate(film);
         return filmStorage.update(film);
+    }
+
+    @PutMapping("/{filmId}/like/{userId}")
+    public void addLike(
+            @PathVariable int filmId,
+            @PathVariable int userId
+    ) {
+        filmService.addLike(userId, filmId);
+    }
+
+    @DeleteMapping("/{filmId}/like/{userId}")
+    public void removeLike(
+            @PathVariable int filmId,
+            @PathVariable int userId
+    ) {
+        filmService.removeLike(userId, filmId);
+    }
+
+    @GetMapping("/popular")
+    public List<Film> getPopular(@RequestParam(defaultValue = "10") int count) {
+        if (count <= 0) throw new ValidationException("Размер выборки популярных фильмов должен быть положительным");
+        return filmService.getMostLikedFilms(count);
     }
 
     private void validateFilmReleaseDate(Film film) {
