@@ -47,7 +47,7 @@ public class UserController {
     }
 
     @PutMapping("/{userId}/friends/{friendId}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addFriend(
             @PathVariable int userId,
             @PathVariable int friendId

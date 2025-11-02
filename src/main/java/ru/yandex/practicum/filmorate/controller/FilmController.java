@@ -48,7 +48,7 @@ public class FilmController {
     }
 
     @PutMapping("/{filmId}/like/{userId}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addLike(
             @PathVariable int filmId,
             @PathVariable int userId
