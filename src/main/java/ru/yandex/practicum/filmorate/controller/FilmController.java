@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 
@@ -43,7 +42,6 @@ public class FilmController {
     }
 
     @PutMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public Film update(@Valid @RequestBody Film film) {
         validateFilmReleaseDate(film);
         return filmStorage.update(film);

@@ -41,7 +41,6 @@ public class UserController {
     }
 
     @PutMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public User update(@Valid @RequestBody User user) {
         validateUserLogin(user);
         return userStorage.update(user);
