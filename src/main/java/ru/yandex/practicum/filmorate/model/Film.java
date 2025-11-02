@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.model;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -13,7 +14,7 @@ public class Film {  //TODO: Переписать валидацию на Spring
     private int id;
     @NotBlank
     private String name;
-    @Max(value = 200)
+    @Size(max = 200)
     private String description;
     private LocalDate releaseDate;
     @Positive
