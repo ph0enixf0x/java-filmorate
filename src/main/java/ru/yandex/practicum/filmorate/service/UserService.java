@@ -32,13 +32,15 @@ public class UserService {
 
     public User updateUser(User user) {
         validateUserLogin(user);
+        String userName = user.getName();
+        if (userName == null || userName.isBlank()) user.setName(user.getLogin());
         return userStorage.update(user);
     }
 
     public void addFriend(int userId, int friendId) {
         User originalUser = userStorage.getUserById(userId);
         User friendUser = userStorage.getUserById(friendId);
-        log.debug("Польователю {} добавляется новый друг {}", originalUser, friendUser);
+        log.debug("Пользователю {} добавляется новый друг {}", originalUser, friendUser);
         originalUser.getFriends().add(friendId);
         friendUser.getFriends().add(userId);
     }

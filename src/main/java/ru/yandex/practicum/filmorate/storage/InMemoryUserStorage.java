@@ -42,8 +42,6 @@ public class InMemoryUserStorage implements UserStorage {
     public User update(User user) {
         int userId = user.getId();
         if (users.containsKey(userId)) {
-            String userName = user.getName();
-            if (userName == null || userName.isBlank()) user.setName(user.getLogin());
             users.put(userId, user);
             log.info("Обновлен пользователь: {}", user);
             return user;
