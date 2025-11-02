@@ -2,11 +2,12 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
+import java.util.Collection;
 import java.util.List;
 
 @Slf4j
@@ -15,6 +16,24 @@ import java.util.List;
 public class UserService {
 
     private final UserStorage userStorage;
+
+    public Collection<User> getAllUsers() {
+        return userStorage.getUsers();
+    }
+
+    public User getUserById(int userId) {
+        return userStorage.getUserById(userId);
+    }
+
+    public User createUser(User user) {
+        validateUserLogin(user);
+        return userStorage.create(user);
+    }
+
+    public User updateUser(User user) {
+        validateUserLogin(user);
+        return userStorage.update(user);
+    }
 
     public void addFriend(int userId, int friendId) {
         User originalUser = userStorage.getUserById(userId);
@@ -34,14 +53,21 @@ public class UserService {
 
     public List<User> getFriends(int userId) {
         return userStorage.getUserById(userId).getFriends().stream()
-                .map(friendId -> userStorage.getUserById(friendId))
+                .map(userStorage::getUserById)
                 .toList();
     }
 
     public List<User> getCommonFriends(int userId, int otherUserId) {
         return userStorage.getUserById(userId).getFriends().stream()
                 .filter(s -> userStorage.getUserById(otherUserId).getFriends().contains(s))
-                .map(friendId -> userStorage.getUserById(friendId))
+                .map(userStorage::getUserById)
                 .toList();
+    }
+
+    private void validateUserLogin(User user) {
+        if (user.getLogin().contains(" ")) {
+            log.error("Логин пользователя не может отсутствовать или содержать пробелы");
+            throw new ValidationException("Логин пользователя не может отсутствовать или содержать пробелы");
+        }
     }
 }

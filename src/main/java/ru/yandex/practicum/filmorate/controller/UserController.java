@@ -3,13 +3,10 @@ package ru.yandex.practicum.filmorate.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.Collection;
 import java.util.List;
@@ -20,31 +17,27 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserStorage userStorage;
     private final UserService userService;
 
     @GetMapping
     public Collection<User> getAll() {
-        return userStorage.getUsers();
+        return userService.getAllUsers();
     }
 
     @GetMapping("/{userId}")
     public User get(@PathVariable int userId) {
-        return userStorage.getUserById(userId);
+        return userService.getUserById(userId);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User create(@Valid @RequestBody User user) {
-        validateUserLogin(user);
-        return userStorage.create(user);
+        return userService.createUser(user);
     }
 
     @PutMapping
     public User update(@Valid @RequestBody User user) {
-        validateUserLogin(user);
-        return userStorage.update(user);
+        return userService.updateUser(user);
     }
 
     @PutMapping("/{userId}/friends/{friendId}")
@@ -75,12 +68,5 @@ public class UserController {
             @PathVariable int otherId
     ) {
         return userService.getCommonFriends(userId, otherId);
-    }
-
-    private void validateUserLogin(User user) {
-        if (user.getLogin().contains(" ")) {
-            log.error("Логин пользователя не может отсутствовать или содержать пробелы");
-            throw new ValidationException("Логин пользователя не может отсутствовать или содержать пробелы");
-        }
     }
 }
