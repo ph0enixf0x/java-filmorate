@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Data
-public class User {  //TODO: Переписать валидацию на Spring Validator
+public class User {
     private int id;
     @Email
     private String email;

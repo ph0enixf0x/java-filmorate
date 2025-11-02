@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Data
-public class Film {  //TODO: Переписать валидацию на Spring Validator
+public class Film {
     private int id;
     @NotBlank
     private String name;
