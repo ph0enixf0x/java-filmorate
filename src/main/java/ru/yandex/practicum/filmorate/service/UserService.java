@@ -32,4 +32,11 @@ public class UserService {
                 .map(friendId -> userStorage.getUserById(friendId))
                 .toList();
     }
+
+    public List<User> getCommonFriends(int userId, int otherUserId) {
+        return userStorage.getUserById(userId).getFriends().stream()
+                .filter(s -> userStorage.getUserById(otherUserId).getFriends().contains(s))
+                .map(friendId -> userStorage.getUserById(friendId))
+                .toList();
+    }
 }
