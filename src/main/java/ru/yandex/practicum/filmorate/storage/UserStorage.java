@@ -9,9 +9,9 @@ public interface UserStorage {
 
     public User getUserById(int userId);
 
-    public void create(User user);
+    public User create(User user);
 
-    public void update(User user);
+    public User update(User user);
 
     public void delete(int userId);
 }

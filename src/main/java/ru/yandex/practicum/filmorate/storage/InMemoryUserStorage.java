@@ -6,7 +6,6 @@ import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Component
@@ -29,16 +28,23 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public void create(User user) {
+    public User create(User user) {
+        user.setId(getNextId());
+        String userName = user.getName();
+        if (userName == null || userName.isBlank()) user.setName(user.getLogin());
         users.put(user.getId(), user);
+        return user;
     }
 
     @Override
-    public void update(User user) {
+    public User update(User user) {
         int userId = user.getId();
         if (users.containsKey(userId)) {
+            String userName = user.getName();
+            if (userName == null || userName.isBlank()) user.setName(user.getLogin());
             users.put(userId, user);
             //log.info("Обновлен пользователь: {}", newUser);
+            return user;
         } else {
             //log.error("Пользователь с идентификатором {} не найден!", userId);
             throw new NotFoundException("Пользователь с идентификатором " + userId + " не найден!");
@@ -48,5 +54,14 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public void delete(int userId) {
         users.remove(userId);
+    }
+
+    private int getNextId() {
+        int currentMaxId = users.keySet()
+                .stream()
+                .mapToInt(id -> id)
+                .max()
+                .orElse(0);
+        return ++currentMaxId;
     }
 }
