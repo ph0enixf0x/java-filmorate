@@ -28,16 +28,19 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public void create(Film film) {
+    public Film create(Film film) {
+        film.setId(getNextId());
         films.put(film.getId(), film);
+        return film;
     }
 
     @Override
-    public void update(Film film) {
+    public Film update(Film film) {
         int filmId = film.getId();
         if (films.containsKey(filmId)) {
             films.put(filmId, film);
             //log.info("Обновлен фильм: {}", newFilm);
+            return film;
         } else {
             //log.error("Фильм с идентификатором {} не найден!", filmId);
             throw new NotFoundException("Фильм с идентификатором " + filmId + " не найден!");
@@ -47,5 +50,14 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public void delete(int filmId) {
         films.remove(filmId);
+    }
+
+    private int getNextId() {
+        int currentMaxId = films.keySet()
+                .stream()
+                .mapToInt(id -> id)
+                .max()
+                .orElse(0);
+        return ++currentMaxId;
     }
 }

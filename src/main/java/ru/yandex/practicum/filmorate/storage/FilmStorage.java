@@ -9,9 +9,9 @@ public interface FilmStorage {
 
     public Film getFilmById(int filmId);
 
-    public void create(Film film);
+    public Film create(Film film);
 
-    public void update(Film film);
+    public Film update(Film film);
 
     public void delete(int filmId);
 }
