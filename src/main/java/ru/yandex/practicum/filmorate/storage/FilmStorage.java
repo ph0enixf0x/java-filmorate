@@ -7,5 +7,5 @@ public interface FilmStorage {
 
     public void update(Film film);
 
-    public void delete(int id);
+    public void delete(int filmId);
 }

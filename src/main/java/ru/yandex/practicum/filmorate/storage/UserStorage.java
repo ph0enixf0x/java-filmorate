@@ -7,5 +7,5 @@ public interface UserStorage {
 
     public void update(User user);
 
-    public void delete(int id);
+    public void delete(int userId);
 }
