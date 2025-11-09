@@ -29,19 +29,24 @@ Template repository for Filmorate project.
 - `description` - Описание фильма
 - `release_date` - Дата выхода фильма
 - `duration` - Длительность фильма в минутах
-- `genre_id` - Идентификатор жанра
-- `rating_id` - Идентификатор MPA рейтинга
+- `rating_id` **[FK → ratings.rating_id]** - Идентификатор MPA рейтинга
+
+#### film_genres
+Таблица связи фильмов с их жанрами
+
+- `film_id` **[PK, FK → films.film_id]** - Идентификатор фильма
+- `genre_id` **[PK, FK → genres.genre_id]** - Идентификатор жанра
 
 #### genres
 Таблица привязки идентификатора жанра к его названию
 
-- `genre_id` **[PK, FK → films.genre_id]** - Идентификатор жанра
+- `genre_id` **[PK]** - Идентификатор жанра
 - `name` - Название жанра, соответствующее идентификатору
 
 #### ratings
 Таблица привязки идентификатора рейтинга MPA к его обозначению
 
-- `rating_id` **[PK, FK → films.rating_id]** - Идентификатор MPA рейтинга
+- `rating_id` **[PK]** - Идентификатор MPA рейтинга
 - `name` - Обозначение рейтинга, соответствующее идентификатору
 
 #### friends
@@ -66,21 +71,36 @@ SELECT  f.film_id,
         f.description,
         f.release_date,
         f.duration,
-        g.name AS genre,
+        STRING_AGG(g.name, ',') AS genres,
         r.name AS rating
-FROM    films AS f
-LEFT JOIN genres AS g ON f.genre_id=g.genre_id
-LEFT JOIN ratings AS r ON f.rating_id=r.rating_id;
+FROM films AS f
+LEFT JOIN film_genres AS fg ON f.film_id = fg.film_id
+LEFT JOIN genres AS g ON fg.genre_id = g.genre_id
+LEFT JOIN ratings AS r ON f.rating_id = r.rating_id
+GROUP BY f.film_id, r.name;
 ```
 
 #### Получение списка 10 самых лайкнутых фильмов
 ```sql
-SELECT  f.*
+SELECT  f.film_id,
+        f.name,
+        f.description,
+        f.release_date,
+        f.duration,
+        STRING_AGG(g.name, ',') AS genres,
+        r.name AS rating
 FROM films AS f
-LEFT JOIN film_likes AS fl ON f.film_id=fl.film_id
-GROUP BY f.film_id
-ORDER BY COUNT(fl.user_id) DESC
-LIMIT 10;
+JOIN (SELECT  film_id,
+        COUNT(user_id) AS likes
+FROM film_likes
+GROUP BY film_id
+ORDER BY likes DESC
+LIMIT 10) AS l ON f.film_id = l.film_id
+LEFT JOIN film_genres AS fg ON f.film_id=fg.film_id
+LEFT JOIN genres AS g ON fg.genre_id = g.genre_id
+LEFT JOIN ratings AS r ON f.rating_id = r.rating_id
+GROUP BY f.film_id, l.likes, rating
+ORDER BY l.likes DESC;
 ```
 
 #### Получение списка всех подтвержденных друзей пользователя
