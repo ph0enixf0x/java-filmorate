@@ -41,8 +41,8 @@ public class UserService {
         User originalUser = userStorage.getUserById(userId);
         User friendUser = userStorage.getUserById(friendId);
         log.debug("Пользователю {} добавляется новый друг {}", originalUser, friendUser);
-        originalUser.getFriends().add(friendId);
-        friendUser.getFriends().add(userId);
+        originalUser.getFriends().put(friendId, true);
+        friendUser.getFriends().put(userId, true);
     }
 
     public void removeFriend(int userId, int friendId) {
@@ -53,15 +53,16 @@ public class UserService {
         friendUser.getFriends().remove(userId);
     }
 
+    //TODO: Добавить поддержку статуса дружбы. Пока что она не учитывается
     public List<User> getFriends(int userId) {
-        return userStorage.getUserById(userId).getFriends().stream()
+        return userStorage.getUserById(userId).getFriends().keySet().stream()
                 .map(userStorage::getUserById)
                 .toList();
     }
 
     public List<User> getCommonFriends(int userId, int otherUserId) {
-        return userStorage.getUserById(userId).getFriends().stream()
-                .filter(s -> userStorage.getUserById(otherUserId).getFriends().contains(s))
+        return userStorage.getUserById(userId).getFriends().keySet().stream()
+                .filter(s -> userStorage.getUserById(otherUserId).getFriends().containsKey(s))
                 .map(userStorage::getUserById)
                 .toList();
     }
